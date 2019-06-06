@@ -1,0 +1,39 @@
+- alias: System - IFTTT Handling
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: ifttt_webhook_received
+      event_data:
+        action: call_service
+  action:
+    service_template: '{{ trigger.event.data.service }}'
+    data_template:
+      entity_id: '{{ trigger.event.data.entity_id }}'
+      channel: '{{ trigger.event.data.channel }}'
+      
+- id: aneliya camera on
+  alias: aneliya camera on
+  trigger:
+  - platform: time
+    at: '19:00:00'
+  - platform: time
+    at: '12:30:00'
+  action:
+  - entity_id: switch.aneliya
+    service: switch.turn_on
+  - delay: '03:00:00'
+  - entity_id: switch.aneliya
+    service: switch.turn_off
+- id: aneliya camera
+  alias: aneliya camera
+  trigger:
+  - platform: time
+    at: '19:00:00'
+  - platform: time
+    at: '12:30:00'
+  action:
+  - entity_id: switch.aneliya
+    service: switch.turn_on
+  - delay: '03:00:00'
+  - entity_id: switch.aneliya
+    service: switch.turn_off

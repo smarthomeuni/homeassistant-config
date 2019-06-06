@@ -1,0 +1,16 @@
+  - platform: mqtt
+    state_topic: "tele/rfbridge/RESULT"
+    name: 'Remote 1 On'
+    value_template: '{{value_json.RfReceived}}'
+    payload_on: 'Sync 5760,Low 210,High 560,Data 005520,RfKey None'
+    device_class: window
+    qos: 1
+    off_delay: 0
+  - platform: mqtt
+    state_topic: "tele/rfbridge/RESULT"
+    name: 'Remote 1 off'
+#    value_template: '{{value_json.RfReceived}}'
+    payload_on: '{"RfReceived":{"Sync":5750,"Low":210,"High":560,"Data":"005500","RfKey":"None"}}'
+    device_class: window
+    qos: 1
+    off_delay: 0

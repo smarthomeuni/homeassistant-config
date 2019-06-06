@@ -1,0 +1,58 @@
+  spotifypl:
+    alias: 'Spotify Evening '
+    sequence:
+    - service: spotcast.start
+      data:
+        device_name: 'Dining room CA'
+        uri: 'spotify:playlist:1YbSH5Led9X17LktqaZevR'
+    - delay: '00:00:05'
+    - service: media_player.shuffle_set
+      data:
+        entity_id: media_player.spotify
+        shuffle: true
+  spotifymorning:
+    alias: 'Spotify Morning'
+    sequence:
+    - service: spotcast.start
+      data:
+        device_name: 'Dining room CA'
+        uri: 'spotify:playlist:1HhsKOqv81FpJd7S0CMhxz'
+    - delay: '00:00:05'
+    - service: media_player.shuffle_set
+      data:
+        entity_id: media_player.spotify
+        shuffle: true
+  switchoncorridor:
+      alias: switchoncorridor
+      sequence:
+      - service: switch.turn_on
+        entity_id: switch.aeotec_dsc18103_micro_smart_switch_2nd_edition_switch
+  movie_on:
+    alias: 'Prep for movie time'
+    sequence:
+    - service: switch.turn_on
+      entity_id: switch.projector
+    - service: switch.turn_on
+      entity_id: switch.screen
+  movie_off:
+    alias: 'Done with movies'
+    sequence:
+    - service: switch.turn_off
+      entity_id: switch.projector
+    - delay: '00:00:01'
+    - service: switch.turn_off
+      entity_id: switch.projector
+    - service: switch.turn_off
+      entity_id: switch.screen
+  switchlamp:
+    sequence:
+    - service: switch.turn_on
+      entity_id: switch.dining_lamp
+  killswitch:
+    sequence:
+    - service: switch.turn_off
+      entity_id: group.all_switches
+    - service: light.turn_off
+      entity_id: group.all_lights
+    - service: media_player.media_stop
+      entity_id: media_player.spotify

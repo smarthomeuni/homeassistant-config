@@ -1,0 +1,244 @@
+#### Lights - first floor automations ##################################
+### wait_template: "{{ is_state(trigger.entity_id, 'on') }}" ###
+
+- id: bedroom on
+  alias: Bedroom Light On
+  trigger:
+  - entity_id: binary_sensor.bedroom_sensor
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+    condition: and 
+    conditions:
+      - condition: numeric_state
+        entity_id: sun.sun
+        value_template: '{{ state.attributes.elevation }}'
+        below: 1.5
+      - before: '22:00:00'
+        condition: time
+  action:
+  - data:
+      brightness: 72
+      rgb_color:
+      - 255
+      - 166
+      - 86
+      transition: 7
+    entity_id: light.bedroom
+    service: light.turn_on
+- id: Bedroom Off
+  alias: Bedroom Light Off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.bedroom_sensor
+    to: 'off'
+    from: 'on'
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 5
+  action:
+  - entity_id: light.bedroom
+    service: light.turn_off
+    
+- id: kitchen_undercabinet_lights_on
+  alias: kitchen undercabinet lights on
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+    from: 'off'
+    to: 'on'
+  - platform: numeric_state
+    entity_id: sensor.aeon_labs_zw100_multisensor_6_luminance
+    below: '12'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+      state: 'on'
+    - condition: numeric_state
+      entity_id: sensor.aeon_labs_zw100_multisensor_6_luminance
+      below: '10'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.under_cabinet
+    
+- id: dining_lamp_off
+  alias: Dining lamp on
+  trigger:
+  - platform: state
+    entity_id: switch.under_cabinet
+    from: 'off'
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+    - condition: time
+      after: '6:00:00'
+    - condition: time
+      before: '21:00:00'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.dining_lamp
+    
+- id: lamp_lights_off
+  alias: lamp_lights_off
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.aeon_labs_zw100_multisensor_6_luminance
+    above: '15'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  condition:
+    condition: state
+    entity_id: switch.dining_lamp
+    state: 'on'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.dining_lamp
+    
+- id: undercabinet_lights_off
+  alias: kitchen undercabinet lights off at night
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  - platform: numeric_state
+    entity_id: sensor.aeon_labs_zw100_multisensor_6_luminance
+    above: '12'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  condition:
+    condition: state
+    entity_id: switch.under_cabinet
+    state: 'on'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.under_cabinet
+    
+- id: switch_on_corridor_lights
+  alias: switch on corridor on motion and lux
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+    from: 'off'
+    to: 'on'
+  - platform: numeric_state
+    entity_id: sensor.aeon_labs_zw100_multisensor_6_luminance
+    below: '12'
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: switch.aeon_labs_dsc18103_micro_smart_switch_2nd_edition_switch
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+      state: 'on'
+    - condition: numeric_state
+      entity_id: sensor.aeon_labs_zw100_multisensor_6_luminance
+      below: '12'
+    - condition: state
+      entity_id: light.gateway_light_34ce008c196a
+      state: 'off'
+  action:
+    service: switch.turn_on
+    entity_id: switch.aeon_labs_dsc18103_micro_smart_switch_2nd_edition_switch
+
+- id: switch_off_corridor_lights
+  alias: switch off corridor if no motion
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  - platform: numeric_state
+    entity_id: sensor.aeon_labs_zw100_multisensor_6_luminance
+    above: '12'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: switch.aeon_labs_dsc18103_micro_smart_switch_2nd_edition_switch
+      state: 'on'
+    - condition: state
+      entity_id: light.gateway_light_34ce008c196a
+      state: 'on'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.aeon_labs_dsc18103_micro_smart_switch_2nd_edition_switch
+- id: corridor_lights_on_when_late
+  alias: home late
+  trigger:
+    platform: state
+    entity_id: binary_sensor.fibaro_system_fgk10x_door_opening_sensor_sensor
+    from: 'off'
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+    - condition: sun
+      after: sunset
+      after_offset: 00:00:00
+    - condition: state
+      entity_id: switch.aeon_labs_dsc18103_micro_smart_switch_2nd_edition_switch
+      state: 'off'
+    - condition: state
+      entity_id: light.gateway_light_34ce008c196a
+      state: 'off'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.aeon_labs_dsc18103_micro_smart_switch_2nd_edition_switch
+  - delay: 0:10
+  - service: switch.turn_off
+    entity_id: switch.aeon_labs_dsc18103_micro_smart_switch_2nd_edition_switch
+- id: dining-room-lamp
+  alias: dining-room-lamp
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.presence_7
+    from: 'off'
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: switch.dining_lamp
+        state: 'off'
+      - condition: state
+        entity_id: switch.dining_main
+        state: 'off'
+      - condition: numeric_state
+        entity_id: sun.sun
+        value_template: '{{ state.attributes.elevation }}'
+        below: 1.5
+  action:
+  - service: switch.turn_on
+    entity_id: switch.dining_lamp

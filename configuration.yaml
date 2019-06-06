@@ -1,0 +1,64 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: !secret hass_property_name
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret hass_latitude
+  longitude: !secret hass_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 0
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret hass_timezone
+  # Customization file
+  customize: !include customize.yaml
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+ifttt:
+  key: !secret hass_ifttt_api
+    
+recorder:
+  db_url: !secret hass_mariadb_url
+
+# Discover some devices automatically
+discovery:
+  ignore:
+    - yeelight
+    
+yeelight:
+  devices:
+    192.168.1.17:
+      name: Bedroom
+
+zwave:
+  usb_path: /dev/ttyACM0
+
+media_player:
+  - platform: spotify
+    client_id: !secret hass_spotify_client_id
+    client_secret: !secret hass_spotify_client_secret
+
+spotcast:
+  username: !secret hass_spotify_username
+  password: !secret hass_spotify_password
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# Config
+
+switch: !include config/switches.yaml
+sensor: !include config/sensors.yaml
+binary_sensor: !include config/binary_sensors.yaml
+
+# Automations
+
+automation: !include_dir_merge_list automations/
+script: !include scripts.yaml
+
+# UI
+
+group: !include groups.yaml

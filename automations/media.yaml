@@ -1,0 +1,85 @@
+- id: chromecast audio on
+  alias: chromecast audio on
+  trigger:
+    platform: state
+    entity_id: media_player.projector
+    to: 'playing'
+  condition:
+    condition: state
+    entity_id: switch.realamp
+    state: 'off'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.realamp
+- id: chromecast audio off
+  alias: chromecast audio off
+  trigger:
+    platform: state
+    entity_id: media_player.projector
+    to: unavailable
+  condition:
+    condition: state
+    entity_id: switch.realamp
+    state: 'on'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.realamp
+- id: play_next
+  alias: play_next
+  trigger:
+    platform: state
+    entity_id: binary_sensor.remote_1_on
+    from: 'off'
+    to: 'on'
+  action:
+  - service: media_player.media_next_track
+- id: play_previous
+  alias: play_previous
+  trigger:
+    platform: state
+    entity_id: binary_sensor.remote_1_off
+    from: 'off'
+    to: 'on'
+  action:
+  - service: media_player.media_previous_track
+- id: music morning 
+  alias: morning music 
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+    from: 'off'
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        after: '05:00:00'
+        before: '08:00:00'
+      - condition: template
+        value_template: "{{ not is_state('media_player.dining_room_ca', 'playing') }}"
+#        value_template: “{{ states.media_player.dining_room_ca != 'playing' }}”
+#        value_template: “{{ not is_state(‘alarm_control_panel.ha_alarm’,‘armed_home’)}}”
+  action:
+    service: script.turn_on
+    entity_id: script.spotifymorning
+- id: music evening
+  alias: music evening
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.aeon_labs_zw100_multisensor_6_sensor
+    from: 'off'
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - after: '20:00:00'
+        before: '22:00:00'
+        condition: time
+      - condition: template
+#        value_template: “{{ states.media_player.dining_room_ca != 'playing' }}”
+        value_template: "{{ not is_state('media_player.dining_room_ca', 'playing') }}"
+#      - condition: template
+#        value_template: "{{ if not is_state('media_player.dining_room_ca', 'playing') %}}"
+  action:
+    service: script.turn_on
+    entity_id: script.spotifymorning
