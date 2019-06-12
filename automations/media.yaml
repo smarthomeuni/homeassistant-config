@@ -82,4 +82,16 @@
 #        value_template: "{{ if not is_state('media_player.dining_room_ca', 'playing') %}}"
   action:
     service: script.turn_on
-    entity_id: script.spotifymorning
+    entity_id: script.spotifypl
+
+# Cuckoo
+
+- alias: Cuckoo Clock
+  trigger:
+  - platform: time
+    at: '12:00:00'
+  - platform: time
+    at: '18:00:00'
+  action:
+    service: script.turn_on
+    entity_id: script.cuckoo

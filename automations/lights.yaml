@@ -16,10 +16,38 @@
         value_template: '{{ state.attributes.elevation }}'
         below: 1.5
       - before: '22:00:00'
+        after: '06:00:00'
         condition: time
   action:
   - data:
       brightness: 72
+      rgb_color:
+      - 255
+      - 166
+      - 86
+      transition: 7
+    entity_id: light.bedroom
+    service: light.turn_on
+- id: bedroom on late night
+  alias: Bedroom Light On late night
+  trigger:
+  - entity_id: binary_sensor.bedroom_sensor
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+    condition: and 
+    conditions:
+      - condition: numeric_state
+        entity_id: sun.sun
+        value_template: '{{ state.attributes.elevation }}'
+        below: 1.5
+      - before: '06:00:00'
+        after: '00:00:00'
+        condition: time
+  action:
+  - data:
+      brightness: 1
       rgb_color:
       - 255
       - 166
@@ -239,6 +267,29 @@
         entity_id: sun.sun
         value_template: '{{ state.attributes.elevation }}'
         below: 1.5
+  action:
+  - service: switch.turn_on
+    entity_id: switch.dining_lamp
+- id: dining-room-lamp-off
+  alias: dining-room-lamp-off
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.presence_7
+    from: 'on'
+    to: 'of'
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: switch.dining_lamp
+        state: 'off'
+      - before: '05:00:00'
+        after: '22:00:00'
+        condition: time
   action:
   - service: switch.turn_on
     entity_id: switch.dining_lamp

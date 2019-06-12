@@ -10,6 +10,7 @@
       data:
         entity_id: media_player.spotify
         shuffle: true
+#another good playlist: 76nfWKXVK9Z5HKOK3SV6mv
   spotifymorning:
     alias: 'Spotify Morning'
     sequence:
@@ -56,3 +57,18 @@
       entity_id: group.all_lights
     - service: media_player.media_stop
       entity_id: media_player.spotify
+  cuckoo:
+    sequence:
+    - service: media_player.turn_on
+      data:
+        entity_id: media_player.mini_ca
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.mini_ca
+        volume_level: .3
+    - delay: '00:00:02'
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.mini_ca
+        media_content_id: https://hass.kkhabibullin.com/local/cuckoo-clock-sound.mp3
+        media_content_type: 'audio/mp3'

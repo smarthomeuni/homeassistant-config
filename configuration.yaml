@@ -27,9 +27,21 @@ discovery:
   ignore:
     - yeelight
     
+stream:
+
+camera: 
+  - platform: generic
+    name: Dining_Room
+    still_image_url: http://192.168.1.28/tmpfs/auto.jpg
+    stream_source: rtsp://192.168.1.28:554/11
+    verify_ssl: false
+    username: !secret hass_dining_camera_user
+    password: !secret hass_dining_camera_pass
+    authentication: basic
+
 yeelight:
   devices:
-    192.168.1.17:
+    192.168.1.10:
       name: Bedroom
 
 zwave:
@@ -43,6 +55,13 @@ media_player:
 spotcast:
   username: !secret hass_spotify_username
   password: !secret hass_spotify_password
+
+xiaomi_aqara:
+  discovery_retry: 10
+  gateways:
+    - key: !secret hass_xiaomi_key
+      mac: !secret hass_xiaomi_mac
+      host: 192.168.1.2
 
 # Text to speech
 tts:
