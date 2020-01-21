@@ -2,7 +2,7 @@
   alias: chromecast audio on
   trigger:
     platform: state
-    entity_id: media_player.projector
+    entity_id: media_player.chromecast5312
     to: 'playing'
   condition:
     condition: state
@@ -11,11 +11,13 @@
   action:
   - service: switch.turn_on
     entity_id: switch.realamp
+  - service: media_player.media_stop
+    entity_id: media_player.dining_room_speaker
 - id: chromecast audio off
   alias: chromecast audio off
   trigger:
     platform: state
-    entity_id: media_player.projector
+    entity_id: media_player.chromecast5312
     to: unavailable
   condition:
     condition: state
@@ -56,7 +58,7 @@
         after: '05:00:00'
         before: '08:00:00'
       - condition: template
-        value_template: "{{ not is_state('media_player.dining_room_ca', 'playing') }}"
+        value_template: "{{ not is_state(' media_player.dining_room_speaker', 'playing') }}"
 #        value_template: “{{ states.media_player.dining_room_ca != 'playing' }}”
 #        value_template: “{{ not is_state(‘alarm_control_panel.ha_alarm’,‘armed_home’)}}”
   action:
@@ -77,7 +79,7 @@
         condition: time
       - condition: template
 #        value_template: “{{ states.media_player.dining_room_ca != 'playing' }}”
-        value_template: "{{ not is_state('media_player.dining_room_ca', 'playing') }}"
+        value_template: "{{ not is_state('media_player.dining_room_speaker', 'playing') }}"
 #      - condition: template
 #        value_template: "{{ if not is_state('media_player.dining_room_ca', 'playing') %}}"
   action:

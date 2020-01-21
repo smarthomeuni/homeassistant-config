@@ -1,1 +1,36 @@
   - platform: yr
+  - platform: template
+    sensors:
+      bedroom_temp:
+        friendly_name: "Bedroom Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.bedroom', 'current_temperature') }}"
+      livingroom_temp:
+        friendly_name: "Living Room Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.living_room', 'current_temperature') }}"
+      bedroom2_temp:
+        friendly_name: "Upstairs Bedroom Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.bedroom2', 'current_temperature') }}"
+      aneliya_temp:
+        friendly_name: "Aneliya's Room Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.child_room', 'current_temperature') }}"
+      cabinet_temp:
+        friendly_name: "Robert's Room Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.office', 'current_temperature') }}"
+      kitchen_temp:
+        friendly_name: "Kitchen Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.kitchen', 'current_temperature') }}"
+      corridor_temp:
+        friendly_name: "Corridor Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.corridor', 'current_temperature') }}"
+      dining_temp:
+        friendly_name: "Dining Room Temp"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('climate.dining_room', 'current_temperature') }}"
+        

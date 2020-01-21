@@ -8,13 +8,22 @@
     payload_off: "OFF"
     retain: true
   - platform: broadlink
-    host: 192.168.1.18
+    host: 192.168.1.61
     mac: '34:EA:34:6F:E6:88'
   - platform: mqtt
     name: "Dining Main"
     icon: mdi:lamp
     command_topic: "cmnd/sonoffT1/power2"
     state_topic: "stat/sonoffT1/POWER2"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "PCMonitor"
+    icon: mdi:lamp
+    command_topic: "cmnd/sonoff8/power"
+    state_topic: "cmnd/sonoff8/POWER"
     qos: 1
     payload_on: "ON"
     payload_off: "OFF"
@@ -56,7 +65,7 @@
     payload_off: "OFF"
     retain: true
   - platform: broadlink
-    host: 192.168.1.18
+    host: 192.168.1.61
     mac: '34:EA:34:6F:E6:88'
     timeout: 15
     switches:
@@ -69,3 +78,8 @@
         command_on: 'eAgyAAYUBhQTCAYUEwcGFBMIBhQGFBMIBhQGFBMIEwgTBxMIEwgGFAYUBhQTCAYUBhQGwxMIAAAAAAAA'
         command_off: 'eAkyABMIFAcHEwcUBxMHFBQHBxQHwxQHBxQHExQHBxQUBwcUFAcHFAcUFAcHEwgTFAgUBxQHAAAAAAAA'
 #    JgBQAAABJpURFBE4EhMRFBE4ETkRFBETETkRFBE4ETgSExEUETgSOBEUETgRORE4ERQROBEUERQROBEUERQRExI4ERQROBE5EQAFJQABJ0sRAA0FAAAAAAAAAAA=
+  - platform: wake_on_lan
+    name: BlackSwan Desktop
+    #mac_address: "90:b1:1c:75:2e:ae" #Optiplex 9010
+    mac_address: 40:8D:5C:1F:79:5B #Optiplex 790
+    host: 192.168.1.30

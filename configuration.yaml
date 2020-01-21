@@ -16,6 +16,13 @@ homeassistant:
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+logger:
+
+hacs:
+  token: !secret my_github_access_token
+
+breaking_changes:
+
 ifttt:
   key: !secret hass_ifttt_api
     
@@ -38,10 +45,25 @@ camera:
     username: !secret hass_dining_camera_user
     password: !secret hass_dining_camera_pass
     authentication: basic
+  - platform: generic
+    name: Hallway
+    still_image_url: http://user:user111!@192.168.1.25:8081/
+    stream_source: http://user:user111!@192.168.1.25:8081/
+    verify_ssl: false
+  - platform: generic
+    name: aneliya
+    still_image_url: http://192.168.1.28/tmpfs/auto.jpg
+    stream_source: rtsp://192.168.1.28:554/11
+    verify_ssl: false
+    username: !secret hass_dining_camera_user
+    password: !secret hass_dining_camera_pass
+    authentication: basic
+
+wake_on_lan:
 
 yeelight:
   devices:
-    192.168.1.10:
+    192.168.1.96:
       name: Bedroom
 
 zwave:
@@ -61,7 +83,11 @@ xiaomi_aqara:
   gateways:
     - key: !secret hass_xiaomi_key
       mac: !secret hass_xiaomi_mac
-      host: 192.168.1.2
+      host: 192.168.1.53
+
+evohome:
+  username: !secret evohome_user
+  password: !secret evohome_pass
 
 # Text to speech
 tts:
